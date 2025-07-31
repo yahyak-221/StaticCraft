@@ -69,5 +69,3 @@ staticcraft/
 - **Build a visual drag-and-drop editor** (using JS canvas or libraries)
 
 ---
-
-Would you like me to **start building this with you**, or do you want a **ready-to-run boilerplate** with the features mentioned?
