@@ -58,14 +58,3 @@ staticcraft/
 └── requirements.txt
 
 ```
-
----
-
-### 🧠 Bonus Ideas:
-
-- **Add GitHub deploy option** (via API)
-- **Let users upload images** (stored in the zip)
-- **Create multi-page site support**
-- **Build a visual drag-and-drop editor** (using JS canvas or libraries)
-
----
