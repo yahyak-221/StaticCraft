@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editor – StaticCraft</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-white text-gray-800 font-sans p-6">
+
+    <h1 class="text-2xl font-bold text-blue-600 mb-4">✍️ StaticCraft Editor</h1>
+
+    <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label class="block mb-2 font-semibold">Write in Markdown:</label>
+            <textarea name="markdown" id="markdown" rows="20"
+                class="w-full p-4 border border-gray-300 rounded-md focus:ring-blue-500"
+                placeholder="# Hello World">{{ content }}</textarea>
+            <button type="submit" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Preview HTML →
+            </button>
+        </div>
+
+        <div>
+            <label class="block mb-2 font-semibold">Live HTML Preview:</label>
+            <div class="p-4 border border-gray-300 rounded-md bg-gray-50 min-h-[300px] prose max-w-none">
+                {{ html_preview|safe }}
+            </div>
+        </div>
+    </form>
+
+    <div class="mt-6">
+        <a href="/template" class="text-blue-600 hover:underline">Skip to Template Selection</a>
+    </div>
+
+</body>
+
+</html>
