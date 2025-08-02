@@ -1,0 +1,77 @@
+<!-- templates/templates.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Select a Template</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .template-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .template-card {
+            width: 300px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+        }
+
+        form {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        button {
+            background: #222;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #444;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🎨 Pick a Template</h1>
+    <div class="template-grid">
+        {% for tmpl in templates %}
+        <div class="template-card">
+            <iframe src="{{ url_for('preview_template', template=tmpl) }}"></iframe>
+            <form method="POST">
+                <input type="hidden" name="template" value="{{ tmpl }}">
+                <button type="submit">Use "{{ tmpl }}"</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

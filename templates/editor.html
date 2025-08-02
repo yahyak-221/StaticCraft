@@ -2,38 +2,164 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Editor – StaticCraft</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>StaticCraft Editor</title>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: #222;
+            color: white;
+            padding: 0.75rem 1rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .editor-container {
+            display: flex;
+            flex: 1;
+            margin-top: 3rem;
+            overflow: hidden;
+        }
+
+        textarea {
+            width: 50%;
+            padding: 1rem;
+            border: none;
+            resize: none;
+            font-size: 1rem;
+            font-family: monospace;
+            background: #f9f9f9;
+            outline: none;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .preview {
+            width: 50%;
+            padding: 1rem;
+            background: #fff;
+            border-left: 1px solid #ccc;
+            overflow-y: auto;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .bottom-bar {
+            background: #222;
+            color: white;
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .submit-btn {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #005fa3;
+        }
+
+        @media (max-width: 768px) {
+            .editor-container {
+                flex-direction: column;
+            }
+
+            textarea,
+            .preview {
+                width: 100%;
+                height: 50%;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-white text-gray-800 font-sans p-6">
+<body>
+    <div class="topbar">🛠 StaticCraft Editor</div>
 
-    <h1 class="text-2xl font-bold text-blue-600 mb-4">✍️ StaticCraft Editor</h1>
+    <form method="POST" style="flex: 1; display: flex; flex-direction: column; height: 100%;">
+        <div class="editor-container" style="flex: 1; display: flex;">
+            <textarea name="markdown" id="markdownInput" placeholder="Write your markdown here..."
+                style="width: 50%; height: 100%; padding: 1rem; font-size: 1rem; box-sizing: border-box;">{{ content }}</textarea>
 
-    <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-            <label class="block mb-2 font-semibold">Write in Markdown:</label>
-            <textarea name="markdown" id="markdown" rows="20"
-                class="w-full p-4 border border-gray-300 rounded-md focus:ring-blue-500"
-                placeholder="# Hello World">{{ content }}</textarea>
-            <button type="submit" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                Preview HTML →
-            </button>
-        </div>
-
-        <div>
-            <label class="block mb-2 font-semibold">Live HTML Preview:</label>
-            <div class="p-4 border border-gray-300 rounded-md bg-gray-50 min-h-[300px] prose max-w-none">
+            <div class="preview" id="previewOutput"
+                style="width: 50%; height: 100%; padding: 1rem; overflow-y: auto; border-left: 1px solid #ccc;">
                 {{ html_preview|safe }}
             </div>
         </div>
+
+        <div style="padding: 0.5rem; background: #eee;">
+            <label>📷 Upload Image:
+                <input type="file" id="imageUpload" accept="image/*">
+            </label>
+        </div>
+
+        <div class="bottom-bar" style="padding: 1rem; text-align: right;">
+            <button type="submit" class="submit-btn"
+                style="background: #222; color: white; padding: 0.5rem 1rem; border: none; cursor: pointer;">
+                Next: Choose Template →
+            </button>
+        </div>
     </form>
 
-    <div class="mt-6">
-        <a href="/template" class="text-blue-600 hover:underline">Skip to Template Selection</a>
-    </div>
+
+    <script>
+        const md = window.markdownit();
+        const input = document.getElementById("markdownInput");
+        const preview = document.getElementById("previewOutput");
+        const imageUpload = document.getElementById("imageUpload");
+
+        function updatePreview() {
+            const raw = input.value;
+            preview.innerHTML = md.render(raw);
+        }
+
+        input.addEventListener("input", updatePreview);
+        window.addEventListener("load", updatePreview);
+
+        imageUpload.addEventListener("change", async function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            const res = await fetch("/upload-image", {
+                method: "POST",
+                body: formData
+            });
+
+            if (res.ok) {
+                const imageUrl = await res.text();
+                const altText = prompt("Enter image alt text:", "Image");
+                const markdownImage = `![${altText}](${imageUrl})\n`;
+                input.value += markdownImage;
+                updatePreview();
+            } else {
+                alert("Image upload failed");
+            }
+        });
+    </script>
 
 </body>
 

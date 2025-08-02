@@ -1,2 +1,2 @@
-Flask
-markdown2
+Flask==2.3.2
+markdown2==2.4.10

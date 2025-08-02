@@ -1,0 +1,19 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    padding: 2rem;
+    background: #f0f0f0;
+    color: #222;
+}
+
+textarea {
+    width: 100%;
+    font-size: 1rem;
+    padding: 1rem;
+}
+
+.preview {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    background: #fff;
+    margin-top: 1rem;
+}

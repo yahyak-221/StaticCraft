@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Your Dark Static Site</title>
+    <style>
+        body {
+            background: #111;
+            color: #eee;
+            font-family: sans-serif;
+            padding: 2rem;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        a {
+            color: #00c8ff;
+        }
+    </style>
+</head>
+
+<body>
+    {{ content|safe }}
+</body>
+
+</html>
